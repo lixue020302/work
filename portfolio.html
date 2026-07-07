@@ -733,41 +733,19 @@ pcCards.forEach(function(card){
   audio.volume=0.5;
   var playing=false;
 
-  // resume from previous session
-  var t=sessionStorage.getItem('musicTime');
-  if(t){audio.currentTime=parseFloat(t);}
-  if(sessionStorage.getItem('musicPlaying')==='1'){
-    var p=audio.play();
-    if(p&&p.then){
-      p.then(function(){playing=true;btn.classList.add('playing');})
-      .catch(function(){});
-    }
-  }
-
-  // save time before unload
-  window.addEventListener('beforeunload',function(){
-    sessionStorage.setItem('musicTime',audio.currentTime);
-    sessionStorage.setItem('musicPlaying',playing?'1':'0');
-  });
-
   btn.addEventListener('click',function(){
     if(playing){
       audio.pause();btn.classList.remove('playing');
       playing=false;
-      sessionStorage.setItem('musicPlaying','0');
     }else{
       audio.play().then(function(){btn.classList.add('playing');})
       .catch(function(){});
       playing=true;
-      sessionStorage.setItem('musicPlaying','1');
     }
   });
 
-  // auto-play on first visit
-  if(!sessionStorage.getItem('musicPlaying')){
-    audio.play().then(function(){playing=true;btn.classList.add('playing');sessionStorage.setItem('musicPlaying','1');})
-    .catch(function(){});
-  }
+  audio.play().then(function(){playing=true;btn.classList.add('playing');})
+  .catch(function(){});
 })();
 </script>
 </div>
